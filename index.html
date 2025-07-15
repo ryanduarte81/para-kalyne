@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>surpresinha para meu amor </title>
+  <style>
+    :root {
+      --rosa: #e2808f;
+      --vermelho: #ca2856;
+      --roxo: #8c7aad;
+      --branco: #cea6a6;
+      --cinza: #f8f8fa;
+      --sombra: 0 4px 24px rgba(255, 105, 180, 0.15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Quicksand', 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, var(--rosa) 0%, var(--roxo) 100%);
+      min-height: 100vh;
+      color: #8c2e4a;
+      overflow-x: hidden;
+    }
+    .hearts-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .heart {
+      position: absolute;
+      width: 32px; height: 32px;
+      background: transparent;
+      animation: float 6s linear infinite;
+      opacity: 0.7;
+    }
+    .heart svg {
+      width: 100%; height: 100%;
+      display: block;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.7) rotate(0deg); opacity: 0.7; }
+      80% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.1) rotate(30deg); opacity: 0; }
+    }
+    .welcome {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(248, 223, 223, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      transition: opacity 1s;
+    }
+    .welcome.hide { opacity: 0; pointer-events: none; }
+    .welcome h1 {
+      font-size: 2.2rem;
+      color: var(--vermelho);
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 8px #fff6;
+    }
+    .welcome button {
+      background: var(--roxo);
+      color: var(--branco);
+      border: none;
+      border-radius: 24px;
+      padding: 0.8em 2em;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      transition: background 0.2s;
+    }
+    .welcome button:hover {
+      background: var(--vermelho);
+    }
+    main {
+      opacity: 0;
+      transition: opacity 1s;
+      padding-bottom: 48px;
+    }
+    main.show { opacity: 1; }
+    section {
+      margin: 0 auto 48px auto;
+      max-width: 700px;
+      background: var(--cinza);
+      border-radius: 24px;
+      box-shadow: var(--sombra);
+      padding: 32px 20px 24px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+    section:not(:first-child) { margin-top: 32px; }
+    h2 {
+      color: var(--vermelho);
+      margin-top: 0;
+      font-size: 1.7rem;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      section { padding: 18px 6px 16px 6px; }
+      h2 { font-size: 1.2rem; }
+      .welcome h1 { font-size: 1.2rem; }
+    }
+    /* Linha do tempo fofa */
+    .timeline {
+      position: relative;
+      margin: 32px 0 0 0;
+      padding-left: 30px;
+      border-left: 3px dashed var(--vermelho);
+      min-height: 200px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateX(-40px);
+      animation: timelineIn 0.8s forwards;
+    }
+    .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.5s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.8s; }
+    .timeline-item:nth-child(4) { animation-delay: 1.1s; }
+    .timeline-item:nth-child(5) { animation-delay: 1.4s; }
+    @keyframes timelineIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -16px; top: 8px;
+      width: 18px; height: 18px;
+      background: var(--rosa);
+      border: 3px solid var(--vermelho);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px #ffb6c1aa;
+      z-index: 2;
+    }
+    .timeline-content {
+      background: var(--branco);
+      border-radius: 16px;
+      padding: 12px 18px;
+      box-shadow: 0 2px 8px #ffb6c1aa;
+      margin-left: 12px;
+      position: relative;
+      min-width: 180px;
+    }
+    .timeline-date {
+      font-size: 0.95em;
+      color: var(--roxo);
+      font-weight: bold;
+      margin-bottom: 2px;
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .timeline { padding-left: 16px; }
+      .timeline-content { padding: 8px 8px; }
+    }
+    /* Quiz fofo */
+    .section-quiz {
+      animation: fadeIn 1.2s;
+    }
+    .quiz-question {
+      margin-bottom: 22px;
+      background: var(--branco);
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px #ffb6c1aa;
+    }
+    .quiz-question p {
+      margin: 0 0 8px 0;
+      color: var(--vermelho);
+      font-weight: bold;
+    }
+    .quiz-btn {
+      background: var(--vermelho);
+      color: var(--branco);
+      border: none;
+      border-radius: 18px;
+      padding: 0.6em 1.6em;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: var(--sombra);
+      transition: background 0.2s;
+    }
+    .quiz-btn:hover {
+      background: var(--roxo);
+    }
+    .quiz-feedback {
+      margin-top: 18px;
+      font-size: 1.1em;
+      color: var(--vermelho);
+      text-align: center;
+      min-height: 32px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Jogo da Memória */
+    .section-memoria {
+      animation: fadeIn 1.2s;
+    }
+    .memory-game {
+      display: grid;
+      grid-template-columns: repeat(4, 110px);
+      gap: 22px;
+      justify-content: center;
+      margin: 24px 0 12px 0;
+    }
+    .memory-card {
+      width: 110px;
+      height: 110px;
+      background: var(--branco);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #ffb6c1aa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      perspective: 600px;
+      transition: box-shadow 0.2s;
+    }
+    .memory-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-inner {
+      width: 100%; height: 100%;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%; height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-front {
+      background: var(--rosa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--vermelho);
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      background: var(--branco);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-back img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 12px;
+    }
+    .memory-feedback {
+      margin-top: 18px;
+      font-size: 1.1em;
+      color: var(--vermelho);
+      text-align: center;
+      min-height: 32px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    @media (max-width: 600px) {
+      .memory-game { grid-template-columns: repeat(2, 90px); gap: 10px; }
+      .memory-card { width: 90px; height: 90px; }
+    }
+    /* Galeria de Fotos (Slideshow) */
+    .section-galeria {
+      animation: fadeIn 1.2s;
+    }
+    .gallery-container {
+      position: relative;
+      max-width: 100%;
+      margin: auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--sombra);
+    }
+    .gallery-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+    }
+    /* Botões de Próximo e Anterior */
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 16px;
+      margin-top: -22px;
+      color: var(--branco);
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.6s ease;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    .prev:hover, .next:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+    /* Pontos / Indicadores */
+    .dot {
+      cursor: pointer;
+      height: 12px;
+      width: 12px;
+      margin: 0 4px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+    }
+    .active-dot, .dot:hover {
+      background-color: var(--vermelho);
+    }
+    /* Animação de fade */
+    .fade {
+      animation-name: fade;
+      animation-duration: 1.5s;
+    }
+    @keyframes fade {
+      from {opacity: .4}
+      to {opacity: 1}
+    }
+    @media (max-width: 600px) {
+      .prev, .next {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+    /* Cartinha de Amor (Máquina de Escrever) */
+    .section-cartinha {
+      animation: fadeIn 1.2s;
+    }
+    .carta-container {
+      background: var(--branco);
+      border-radius: 16px;
+      box-shadow: var(--sombra);
+      padding: 30px;
+      text-align: left;
+      line-height: 1.6;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1em;
+      color: #7a2d48;
+      overflow: hidden;
+      position: relative;
+    }
+    #carta-texto {
+      white-space: pre-wrap; /* Para manter quebras de linha e espaços */
+      overflow: hidden; /* Garante que o texto não ultrapasse o container */
+      border-right: .15em solid var(--vermelho); /* Cursor piscante */
+      font-family: 'Courier New', Courier, monospace; /* Fonte de máquina de escrever */
+      font-size: 1.2em;
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+      word-wrap: break-word;
+    }
+    /* Animação do cursor piscante */
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--vermelho); }
+    }
+    /* Surpresa Final */
+    .section-surpresa {
+      animation: fadeIn 1.2s;
+      text-align: center;
+    }
+    .surprise-btn {
+      background: var(--vermelho);
+      color: var(--branco);
+      border: none;
+      border-radius: 28px;
+      padding: 1em 2.5em;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 20px;
+    }
+    .surprise-btn:hover {
+      background: var(--roxo);
+      transform: translateY(-3px);
+    }
+    .surprise-content {
+      margin-top: 30px;
+      display: none; /* Escondido por padrão */
+      opacity: 0;
+      transition: opacity 1s ease-out;
+    }
+    .surprise-content.show {
+      display: block;
+      opacity: 1;
+    }
+    /* Estilo para vídeo responsivo (YouTube Embed) */
+    .video-responsive {
+      overflow: hidden;
+      padding-bottom: 56.25%; /* Proporção 16:9 */
+      position: relative;
+      height: 0;
+      border-radius: 16px;
+      box-shadow: var(--sombra);
+    }
+    .video-responsive iframe {
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      border: none; /* Remover borda padrão do iframe */
+      border-radius: 16px; /* Manter borda arredondada */
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-bg" id="hearts-bg"></div>
+  <div class="welcome" id="welcome">
+    <h1>Oi, amor! Prepare-se para uma surpresinha 💕</h1>
+    <button onclick="startLoveStory()">Quero ver! 😍</button>
+  </div>
+  <main id="main-content">
+    <section id="memoria" class="section-memoria">
+      <h2>Jogo da Memória do Amor</h2>
+      <div class="memory-game" id="memory-game"></div>
+      <div id="memory-feedback" class="memory-feedback"></div>
+    </section>
+    <section id="galeria" class="section-galeria">
+      <h2>Nossas Lembranças</h2>
+      <div class="gallery-container">
+        <div class="gallery-slide fade">
+          <img src="IMG-20250711-WA0010.jpg" alt="Nossas lembranças 1">
+        </div>
+        <div class="gallery-slide fade">
+          <img src="IMG-20250626-WA0321.jpg" alt="Nossas lembranças 2">
+        </div>
+        <div class="gallery-slide fade">
+          <img src="IMG_20240728_144328.jpg" alt="Nossas lembranças 3">
+        </div>
+        <div class="gallery-slide fade">
+          <img src="IMG-20250711-WA0008.jpg" alt="Nossas lembranças 3">
+        </div>
+        <!-- Adicione mais imagens aqui conforme necessário, mantendo a classe 'gallery-slide fade' -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+      </div>
+      <div style="text-align:center; margin-top: 15px;">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <!-- Adicione mais pontos aqui conforme o número de imagens -->
+      </div>
+    </section>
+    <section id="cartinha" class="section-cartinha">
+      <h2>Minha Cartinha para Você</h2>
+      <div class="carta-container">
+        <p id="carta-texto"></p>
+      </div>
+    </section>
+    <section id="surpresa" class="section-surpresa">
+      <h2>Uma Última Surpresa para Você!</h2>
+      <button class="surprise-btn" onclick="revealSurprise()">Clique aqui para uma última surpresa! ✨</button>
+      <div id="surprise-content" class="surprise-content">
+        <div class="video-responsive">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/uCluqnZummc?si=XmjsnezakKUO9x_I&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+    <!-- Próximas seções serão adicionadas aqui -->
+  </main>
+  <script>
+    // Animação de corações flutuando
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      const colors = ['#ffb6c1', '#ff4f81', '#b39ddb', '#fff', '#f8bbd0'];
+      const color = colors[Math.floor(Math.random()*colors.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (4 + Math.random()*3) + 's';
+      heart.innerHTML = `<svg viewBox="0 0 32 32"><path fill="${color}" d="M23.6,4.6c-2.1,0-4,1-5.6,2.7C16,7.3,15.9,7.2,15.7,7c-1.6-1.7-3.5-2.7-5.6-2.7C6.1,4.6,4,6.7,4,9.3c0,2.2,1.2,4.2,3.2,6.1c1.7,1.6,4.1,3.2,6.7,5.2c0.4,0.3,1,0.3,1.4,0c2.6-2,5-3.6,6.7-5.2c2-1.9,3.2-3.9,3.2-6.1C28,6.7,25.9,4.6,23.6,4.6z"/></svg>`;
+      document.getElementById('hearts-bg').appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+    setInterval(createHeart, 400);
+    for(let i=0;i<10;i++) setTimeout(createHeart, i*200);
+
+    // Mostrar conteúdo principal após animação de entrada
+    function startLoveStory() {
+      document.getElementById('welcome').classList.add('hide');
+      setTimeout(() => {
+        document.getElementById('main-content').classList.add('show');
+      }, 800);
+    }
+
+    // Jogo da Memória
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = [
+        'IMG_20240728_144328.jpg',
+        'IMG_20250111_215243.jpg',
+        'IMG-20250329-WA0175.jpg',
+        'IMG-20250519-WA0116.jpg',
+        'IMG-20250626-WA0321.jpg',
+        'IMG-20250711-WA0010.jpg'
+      ];
+      const cards = [...images, ...images];
+      let shuffled = cards.sort(() => 0.5 - Math.random());
+      const game = document.getElementById('memory-game');
+      let flippedCards = [];
+      let lock = false;
+      let matches = 0;
+      function createCard(img, idx) {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.innerHTML = `
+          <div class="card-inner">
+            <div class="card-front">💖</div>
+            <div class="card-back"><img src="${img}" alt="Foto do casal"></div>
+          </div>
+        `;
+        card.addEventListener('click', function() {
+          if (lock || card.classList.contains('flipped') || flippedCards.length === 2) return;
+          card.classList.add('flipped');
+          flippedCards.push({card, img});
+          if (flippedCards.length === 2) {
+            lock = true;
+            if (flippedCards[0].img === flippedCards[1].img) {
+              setTimeout(() => {
+                flippedCards = [];
+                lock = false;
+                matches++;
+                if (matches === images.length) {
+                  document.getElementById('memory-feedback').textContent = 'Parabéns! Você encontrou todos os pares! TE AMO MEU AMOR  💞';
+                }
+              }, 700);
+            } else {
+              setTimeout(() => {
+                flippedCards[0].card.classList.remove('flipped');
+                flippedCards[1].card.classList.remove('flipped');
+                flippedCards = [];
+                lock = false;
+              }, 1000);
+            }
+          }
+        });
+        game.appendChild(card);
+      }
+      game.innerHTML = '';
+      shuffled.forEach((img, idx) => createCard(img, idx));
+    });
+
+    // Galeria de Fotos (Slideshow)
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+      let i;
+      let slides = document.getElementsByClassName("gallery-slide");
+      let dots = document.getElementsByClassName("dot");
+      if (n > slides.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active-dot", "");
+      }
+      slides[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " active-dot";
+    }
+    // Auto-play do slideshow
+    setInterval(() => plusSlides(1), 5000); // Muda a cada 5 segundos
+
+    // Cartinha de Amor (efeito máquina de escrever)
+    const cartaTextoElement = document.getElementById('carta-texto');
+    const cartaCompleta = "Meu amor,\n\nDesde o dia em que te conheci, minha vida ganhou cores que eu nem imaginava que existiam. Cada risada, cada abraço, cada momento ao seu lado é um presente que guardo com muito carinho.\n\nQue a nossa história continue sendo escrita com muito carinho, aventuras e, claro, muito amor! e que a gente pare de brigar tanto.\n\nCom todo o meu amor \n[SEU MÔZIM RYAN DUARTE]";
+    let i = 0;
+    const typingSpeed = 70; // Velocidade da digitação (ms por caractere)
+
+    function typeWriter() {
+      if (i < cartaCompleta.length) {
+        cartaTextoElement.innerHTML += cartaCompleta.charAt(i);
+        i++;
+        setTimeout(typeWriter, typingSpeed);
+      } else {
+        // Remove o cursor piscante após terminar de digitar
+        cartaTextoElement.style.borderRight = 'none';
+      }
+    }
+    // Inicia a digitação da cartinha quando a seção for visível ou após um tempo
+    // Para simplificar, vou iniciar após o carregamento inicial.
+    // Em um projeto real, você pode usar um Intersection Observer.
+    setTimeout(typeWriter, 2000); // Inicia a digitação 2 segundos após o carregamento da página
+
+    // Considerar adicionar um observer para iniciar a animação quando a seção entrar na viewport
+    const cartaObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !cartaTextoElement.dataset.typed) {
+          typeWriter();
+          cartaTextoElement.dataset.typed = 'true'; // Marca como já digitado
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 }); // Inicia quando 50% da seção estiver visível
+    const cartaSection = document.getElementById('cartinha');
+    if (cartaSection) {
+      cartaObserver.observe(cartaSection);
+    }
+
+    // Surpresa Final
+    function revealSurprise() {
+      const surpriseContent = document.getElementById('surprise-content');
+      const surpriseVideo = document.getElementById('surprise-video'); // Agora é um iframe, não mais um vídeo
+      const surpriseAudio = document.getElementById('surprise-audio'); // Este será removido
+
+      surpriseContent.classList.add('show');
+      // O vídeo do YouTube com autoplay e mute na URL já deve iniciar
+
+      // Opcional: Remover o botão após a surpresa ser revelada
+      document.querySelector('.surprise-btn').style.display = 'none';
+    }
+  </script>
+</body>
+</html> 
